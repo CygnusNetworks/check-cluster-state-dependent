@@ -1,0 +1,5 @@
+check-cluster-state-dependent (0.10) jessie; urgency=low
+
+  * Initial release
+
+ -- Dr. Torge Szczepanek <debian@cygnusnetworks.de>  Wed, 03 Feb 2016 17:42:25 +0100

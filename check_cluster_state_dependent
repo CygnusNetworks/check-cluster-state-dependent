@@ -1,0 +1,86 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+import argparse
+import netifaces
+import os
+import socket
+import subprocess
+import sys
+
+STATE_OK = 0
+STATE_WARN = 1
+STATE_CRIT = 2
+STATE_UNKN = 3
+
+CRM_PATH = "/usr/sbin/crm_resource"
+hostname = socket.gethostname()
+
+def ip_addresses():
+	ip_list = []
+	for interface in netifaces.interfaces():
+		if netifaces.AF_INET in netifaces.ifaddresses(interface):
+			for link in netifaces.ifaddresses(interface)[netifaces.AF_INET]:
+				ip_list.append(link["addr"])
+		if netifaces.AF_INET6 in netifaces.ifaddresses(interface):
+			for link in netifaces.ifaddresses(interface)[netifaces.AF_INET6]:
+				ip_list.append(link["addr"])
+	return ip_list
+
+def cluster_is_active(resource):
+	"""Check if given resource is running on this node
+	@param resource: CRM Resource name
+	@type resource: str
+	@rtype: bool
+	"""
+	ret = subprocess.call("%s -W -r %s | grep %s" % (CRM_PATH, resource, hostname ), shell=True, stdout=subprocess.PIPE)
+	return ret == 0
+
+def execute_plugin(plugin_params):
+	plugin = plugin_params[0]
+	if len(plugin_params) > 1:
+		plugin_args = plugin_params[1:]
+	else:
+		plugin_args = []
+	cmdline = "%s %s" % (plugin, " ".join(plugin_args))
+	try:
+		ret = subprocess.check_output(cmdline, shell=True)
+		print (ret)
+		sys.exit(STATE_OK)
+	except subprocess.CalledProcessError as ex:
+		print(ex.output)
+		sys.exit(ex.returncode)
+
+def main():
+	argp = argparse.ArgumentParser()
+	argp.add_argument('-c', '--crm-resource', help='Corosync Resource name', dest='crm')
+	argp.add_argument('-i', '--ip', help='IP address', dest='ip')
+	argp.add_argument('plugin', help='Nagios Plugin Name', nargs=argparse.REMAINDER)
+	args = argp.parse_args()
+
+	if len(args.plugin) < 1:
+		print("UNKNOWN: Need at least one plugin to be called")
+		sys.exit(STATE_UNKN)
+
+	if args.crm is None and args.ip is None:
+		print("UNKNOWN: Need at least one check parameter")
+		sys.exit(STATE_UNKN)
+	elif args.crm is not None:
+		if os.path.exists(CRM_PATH) and os.access(CRM_PATH, os.X_OK):
+			if cluster_is_active(args.crm):
+				execute_plugin(args.plugin)
+			else:
+				print("OK: Cluster resource %s is not active on host %s" % (args.crm, hostname))
+		else:
+			print("UNKNOWN: crm resource binary %s is not callable" % CRM_PATH)
+			sys.exit(STATE_UNKN)
+	elif args.ip is not None:
+		if args.ip in ip_addresses():
+			execute_plugin(args.plugin)
+		else:
+			print("OK: Cluster IP %s is not active on host %s" % (args.ip, hostname))
+			sys.exit(STATE_OK)
+
+
+if __name__ == '__main__':
+	main()
