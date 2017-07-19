@@ -7,7 +7,7 @@
 %global with_python3 1
 %endif
 
-%define srcname check_cluster_state_dependent
+%define srcname check-cluster-state-dependent
 %define version 0.10
 %define release 1
 %define sum Cygnus Networks GmbH %{srcname} package
@@ -78,9 +78,9 @@ LANG=en_US.utf8 py.test-%{python3_version} -vv tests
 
 %files
 %{_bindir}/check_cluster_state_dependent
-%{python2_sitelib}/%{srcname}-%{version}-py2.*.egg-info
+%{python2_sitelib}/check_cluster_state_dependent-%{version}-py2.*.egg-info
 %if 0%{?with_python3}
 %files -n python3-%{project}
 %{_bindir}/check_cluster_state_dependent
-%{python3_sitelib}/%{srcname}-%{version}-py3.*.egg-info
+%{python3_sitelib}/check_cluster_state_dependent-%{version}-py3.*.egg-info
 %endif # with_python3
