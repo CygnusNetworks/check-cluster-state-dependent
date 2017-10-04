@@ -9,7 +9,7 @@
 
 %define srcname check-cluster-state-dependent
 %define version 0.10
-%define release 2
+%define release 3
 %define sum Cygnus Networks GmbH %{srcname} package
 
 Name:           %{srcname}
