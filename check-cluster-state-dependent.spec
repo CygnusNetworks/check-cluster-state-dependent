@@ -9,7 +9,7 @@
 
 %define srcname check-cluster-state-dependent
 %define version 0.10
-%define release 1
+%define release 2
 %define sum Cygnus Networks GmbH %{srcname} package
 
 Name:           %{srcname}
@@ -20,7 +20,7 @@ License:        proprietary
 Source0:        %{srcname}-%{version}.tar.gz
 
 BuildArch:      noarch
-BuildRequires:  python2-devel, python-setuptools
+BuildRequires:  python2-devel, python-setuptools, python-netiface
 %if 0%{?with_check}
 BuildRequires:  pytest
 %endif # with_check
