@@ -20,11 +20,11 @@ License:        proprietary
 Source0:        %{srcname}-%{version}.tar.gz
 
 BuildArch:      noarch
-BuildRequires:  python2-devel, python-setuptools, python-netiface
+BuildRequires:  python2-devel, python-setuptools
 %if 0%{?with_check}
 BuildRequires:  pytest
 %endif # with_check
-Requires:       python-setuptools
+Requires:       python-setuptools, python-netifaces
 
 %{?python_provide:%python_provide python-%{project}}
 
