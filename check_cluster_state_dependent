@@ -2,18 +2,26 @@
 # -*- coding: utf-8 -*-
 
 import argparse
-import netifaces
 import os
 import socket
 import subprocess
 import sys
+import logging
+
+logging.basicConfig()
+log = logging.getLogger(__file__)
+
+try:
+    import netifaces
+except ImportError as e:
+    log.debug('Unable to import netifaces, disabling support for check with IP. Error: %s' % e)
 
 STATE_OK = 0
 STATE_WARN = 1
 STATE_CRIT = 2
 STATE_UNKN = 3
 
-CRM_PATH = "/usr/sbin/crm_resource"
+CRM_PATH = '/usr/sbin/crm_resource'
 hostname = socket.gethostname()
 
 def ip_addresses():
@@ -54,7 +62,8 @@ def execute_plugin(plugin_params):
 def main():
 	argp = argparse.ArgumentParser()
 	argp.add_argument('-c', '--crm-resource', help='Corosync Resource name', dest='crm')
-	argp.add_argument('-i', '--ip', help='IP address', dest='ip')
+	if 'netifaces' in sys.modules:
+		argp.add_argument('-i', '--ip', help='IP address', dest='ip')
 	argp.add_argument('plugin', help='Nagios Plugin Name', nargs=argparse.REMAINDER)
 	args = argp.parse_args()
 
