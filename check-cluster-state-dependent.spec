@@ -8,8 +8,8 @@
 %endif
 
 %define srcname check-cluster-state-dependent
-%define version 0.10
-%define release 3
+%define version 0.11
+%define release 1
 %define sum Cygnus Networks GmbH %{srcname} package
 
 Name:           %{srcname}
