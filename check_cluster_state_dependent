@@ -12,9 +12,9 @@ logging.basicConfig()
 log = logging.getLogger(__file__)
 
 try:
-    import netifaces
+	import netifaces
 except ImportError as e:
-    log.debug('Unable to import netifaces, disabling support for check with IP. Error: %s' % e)
+	log.debug('Unable to import netifaces, disabling support for check with IP. Error: %s' % e)
 
 STATE_OK = 0
 STATE_WARN = 1
