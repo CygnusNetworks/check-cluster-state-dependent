@@ -2,7 +2,7 @@
 
 This small Nagios plugin is intended to be used as a wrapper plugin on High-Availability hosts running Corosync/Pacemaker
 or some other cluster software. The plugin checks for a running Pacemaker resource (using /usr/sbin/crm_resource) or
-a local service ip address.
+a local service ip address, if you have the netifaces module installed.
 If the resource is active or the ip is present, it will execute the given nagios plugin and returns the state of the 
 plugin. If the host is a inactive cluster host (resource or ip not present on the local host), it will simply output a
 plugin state OK.
@@ -21,7 +21,7 @@ Be sure to also monitor your cluster state by some other mechanism.
 # Dependencies
 
  * Python 2.7
- * netifaces
+ * netifaces (optional for ip check)
 
 # Installation
 
@@ -40,7 +40,7 @@ Example using a crm resource:
 /usr/bin/check_cluster_state_dependent -r p_radius  /usr/lib/nagios/plugins/check_ping -H 127.0.0.1 -w 100,10% -c 200,20%    
 ```
 
-Example using a ip:
+Example using a ip (with netifaces module present):
 
 
 ```
