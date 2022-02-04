@@ -53,7 +53,7 @@ def execute_plugin(plugin_params):
 	cmdline = "%s %s" % (plugin, " ".join(plugin_args))
 	try:
 		ret = subprocess.check_output(cmdline, shell=True)
-		print (ret)
+		print (ret.decode('utf8'))
 		sys.exit(STATE_OK)
 	except subprocess.CalledProcessError as ex:
 		print(ex.output)
