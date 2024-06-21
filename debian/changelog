@@ -1,4 +1,10 @@
-check-cluster-state-dependent (0.12) UNRELEASED; urgency=low
+check-cluster-state-dependent (0.13) UNRELEASED; urgency=low
+
+  * Change return value from bytestring to string
+
+ -- Peter Adam <debian@cygnusnetworks.de>  Fri, 21 Jun 2024 10:32:56 +0200
+
+ check-cluster-state-dependent (0.12) UNRELEASED; urgency=low
 
   * make netifaces optional
 
