@@ -56,7 +56,7 @@ def execute_plugin(plugin_params):
 		print (ret.decode('utf8'))
 		sys.exit(STATE_OK)
 	except subprocess.CalledProcessError as ex:
-		print(ex.output)
+		print(ex.output.decode('utf8'))
 		sys.exit(ex.returncode)
 
 def main():
